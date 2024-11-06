@@ -6,34 +6,33 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-24.04
-
-    strategy:
-      matrix:
-        node-version: [22.9.0]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    runs-on: ubuntu-latest
 
     steps:
       - name: ✅ 체크아웃 source code.
         uses: actions/checkout@v3
 
-      - name: ⚙️ ${{ matrix.node-version }} 버전의 노드로 세팅합니다.
+      - name: ⚙️ Node.js 설정
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '16.x'  # 최신 LTS 버전으로 변경
+          cache: 'yarn'  # Yarn 캐시 사용 활성화
 
-      - name: ⚙️ 환경변수를 설정합니다.
-        working-directory: ./
+      - name: ⚙️ 환경변수 설정
         run: |
-          pwd
-          touch .env
-          echo DB_URL=${{ secrets.DB_URL }} >> .env
+          echo "DB_URL=${{ secrets.DB_URL }}" > .env
           cat .env
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
 
       - name: ✨ 패키지 설치
-        working-directory: ./
         run: yarn
-        
+
       - name: ✨ 빌드 과정을 시작
-        working-directory: ./
         run: yarn run build
+
+      # 배포 스텝 추가 (예: Firebase, AWS 등)
+      - name: 🚀 배포
+        run: yarn run deploy
+        env:
+          CI: true
