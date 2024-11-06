@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Welcome to the WithUs Express Server!');
+    res.send('WithUs Express Server!');
 });
 
 app.listen(3000, () => {
