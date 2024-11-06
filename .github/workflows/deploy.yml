@@ -15,7 +15,7 @@ jobs:
       - name: ⚙️ Node.js 설정
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'  # 최신 LTS 버전으로 변경
+          node-version: '20.x'  # Node.js 20 버전을 사용
           cache: 'yarn'  # Yarn 캐시 사용 활성화
 
       - name: ⚙️ 환경변수 설정
