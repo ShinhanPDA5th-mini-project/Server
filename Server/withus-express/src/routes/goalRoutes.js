@@ -1,11 +1,11 @@
 import express from 'express';
-import goalController from '../controllers/goalController.js';
+import { getTodayGoal, uploadBeforePhoto, uploadAfterPhoto, submitGoal } from '../controllers/goalController.js';
 
 const router = express.Router();
 
-router.post('/today', goalController.getTodayGoal);
-router.post('/photos/before', goalController.uploadBeforePhoto);
-router.post('/photos/after', goalController.uploadAfterPhoto);
-router.post('/submit', goalController.submitGoal);
+router.post('/today', getTodayGoal);
+router.post('/photos/before', uploadBeforePhoto);
+router.post('/photos/after', uploadAfterPhoto);
+router.post('/submit', submitGoal);
 
-module.exports = router;
+export default router;

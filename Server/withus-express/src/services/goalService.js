@@ -1,19 +1,19 @@
 import goalRepository from '../repositories/goalRepository.js';
-import EfficientNetModel from '../models/EfficientNetModel.js'
+import EfficientNetModel from '../models/EfficientNetModel.js';
 
-exports.getTodayGoal = async (userId) => {
+const getTodayGoal = async (userId) => {
     return await goalRepository.getRandomGoal(userId);
 };
 
-exports.uploadBeforePhoto = async (userId, photoUrl) => {
+const uploadBeforePhoto = async (userId, photoUrl) => {
     await goalRepository.updateBeforePhoto(userId, photoUrl);
 };
 
-exports.uploadAfterPhoto = async (userId, photoUrl) => {
+const uploadAfterPhoto = async (userId, photoUrl) => {
     await goalRepository.updateAfterPhoto(userId, photoUrl);
 };
 
-exports.evaluateGoal = async (userId) => {
+const evaluateGoal = async (userId) => {
     const goal = await goalRepository.getGoalByUserId(userId);
     const isCompleted = await EfficientNetModel.comparePhotos(goal.beforePhotoUrl, goal.afterPhotoUrl);
 
@@ -23,4 +23,11 @@ exports.evaluateGoal = async (userId) => {
     } else {
         return { message: "인증에 실패하였습니다. 다시 시도해주세요.", retry: true };
     }
+};
+
+export default {
+    getTodayGoal,
+    uploadBeforePhoto,
+    uploadAfterPhoto,
+    evaluateGoal
 };
