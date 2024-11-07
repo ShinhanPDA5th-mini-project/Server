@@ -1,4 +1,4 @@
-import goalService from '../services/goalService';
+import goalService from '../services/goalService.js';
 
 exports.getTodayGoal = async (req, res) => {
     const goal = await goalService.getTodayGoal(req.userId);

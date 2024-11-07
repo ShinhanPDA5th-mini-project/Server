@@ -1,4 +1,4 @@
-import goalRepository from '../repositories/goalRepository';
+import goalRepository from '../repositories/goalRepository.js';
 import EfficientNetModel from '../models/EfficientNetModel'
 
 exports.getTodayGoal = async (userId) => {
