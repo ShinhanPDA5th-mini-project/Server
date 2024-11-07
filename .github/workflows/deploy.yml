@@ -20,7 +20,7 @@ jobs:
           cache-dependency-path: 'Server/withus-express/yarn.lock'
 
       - name: ⚙️ 환경변수를 설정합니다.
-        working-directory: ./
+        working-directory: Server/withus-express
         run: |
           pwd
           touch .env
@@ -48,14 +48,20 @@ jobs:
       - name: 🦖 S3에 압축된 서버 코드를 업로드
         run: aws s3 cp --region ap-northeast-2 ./withus.zip s3://withus-build/deploy/
 
-      - name: 🚀 배포
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /home/ubuntu/Server/Server/withus-express
-            git pull origin main
-            npm install
-            pm2 restart all
+      - name: 🚀 AWS codeDeploy로 배포를 시작
+        run: aws deploy create-deployment
+          --application-name withus-codedeploy
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name dev
+          --s3-location bucket=withus-build,bundleType=zip,key=deploy/withus.zip
+      # - name: 🚀 배포
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: |
+      #       cd /home/ubuntu/Server/Server/withus-express
+      #       git pull origin main
+      #       npm install
+      #       pm2 restart all
