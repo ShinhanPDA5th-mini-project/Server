@@ -17,22 +17,24 @@ jobs:
         with:
           node-version: '20.x'  # Node.js 20 버전을 사용
           cache: 'yarn'  # Yarn 캐시 사용 활성화
+          cache-dependency-path: 'Server/withus-express/yarn.lock'
 
       - name: ⚙️ 환경변수 설정
         run: |
           echo "DB_URL=${{ secrets.DB_URL }}" > .env
           cat .env
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
+        working-directory: Server/withus-express
 
       - name: ✨ 패키지 설치
         run: yarn
+        working-directory: Server/withus-express
 
       - name: ✨ 빌드 과정을 시작
         run: yarn run build
+        working-directory: Server/withus-express
 
-      # 배포 스텝 추가 (예: Firebase, AWS 등)
       - name: 🚀 배포
         run: yarn run deploy
         env:
           CI: true
+        working-directory: Server/withus-express
