@@ -8,4 +8,4 @@ const goalSchema = new mongoose.Schema({
     afterPhotoUrl: String,
 });
 
-module.exports = mongoose.model('Goal', goalSchema);
+export default mongoose.model('Goal', goalSchema);

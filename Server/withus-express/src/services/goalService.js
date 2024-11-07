@@ -1,5 +1,5 @@
 import goalRepository from '../repositories/goalRepository.js';
-import EfficientNetModel from '../models/EfficientNetModel'
+import EfficientNetModel from '../models/EfficientNetModel.js'
 
 exports.getTodayGoal = async (userId) => {
     return await goalRepository.getRandomGoal(userId);
