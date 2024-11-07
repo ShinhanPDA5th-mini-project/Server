@@ -34,7 +34,13 @@ jobs:
         working-directory: Server/withus-express
 
       - name: 🚀 배포
-        run: yarn run deploy
-        env:
-          CI: true
-        working-directory: Server/withus-express
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /Server/withus-express
+            git pull origin main
+            npm install
+            pm2 restart all
