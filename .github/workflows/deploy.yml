@@ -19,12 +19,6 @@ jobs:
           cache: 'yarn'  # Yarn 캐시 사용 활성화
           cache-dependency-path: 'Server/withus-express/yarn.lock'
 
-      - name: ⚙️ 환경변수 설정
-        run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" > .env
-          cat .env
-        working-directory: Server/withus-express
-
       - name: ✨ 패키지 설치
         run: yarn
         working-directory: Server/withus-express
