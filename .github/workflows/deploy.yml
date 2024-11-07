@@ -19,14 +19,6 @@ jobs:
           cache: 'yarn'  # Yarn 캐시 사용 활성화
           cache-dependency-path: 'Server/withus-express/yarn.lock'
 
-      - name: ⚙️ 환경변수를 설정합니다.
-        working-directory: Server/withus-express
-        run: |
-          pwd
-          touch .env
-          echo DATABASE_URL=${{ secrets.DB_URL }} >> .env
-          cat .env
-
       - name: ✨ 패키지 설치
         run: yarn
         working-directory: Server/withus-express
@@ -35,33 +27,14 @@ jobs:
         run: yarn run build
         working-directory: Server/withus-express
 
-      - name: 📦 빌드한 코드를 압축
-        run: zip -r withus.zip ./dist ./scripts ./appspec.yml ./.env ./package.json
-
-      - name: 🌎 AWS에 접속
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: 🚀 배포
+        uses: appleboy/ssh-action@master
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-
-      - name: 🦖 S3에 압축된 서버 코드를 업로드
-        run: aws s3 cp --region ap-northeast-2 ./withus.zip s3://withus-build/deploy/
-
-      - name: 🚀 AWS codeDeploy로 배포를 시작
-        run: aws deploy create-deployment
-          --application-name withus-codedeploy
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name dev
-          --s3-location bucket=withus-build,bundleType=zip,key=deploy/withus.zip
-      # - name: 🚀 배포
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     script: |
-      #       cd /home/ubuntu/Server/Server/withus-express
-      #       git pull origin main
-      #       npm install
-      #       pm2 restart all
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/Server/Server/withus-express
+            git pull origin main
+            npm install
+            pm2 restart all
