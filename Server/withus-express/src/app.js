@@ -13,8 +13,6 @@ console.log("MongoDB URL:", mongoDBUrl); // 환경 변수 로드 확인
 
 
 mongoose.connect(mongoDBUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     writeConcern: { w: 'majority' } // writeConcern 설정 추가
 })
 .then(() => console.log('MongoDB connected'))

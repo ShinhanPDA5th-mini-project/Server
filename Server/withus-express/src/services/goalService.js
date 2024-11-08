@@ -9,8 +9,8 @@ const getSequentialGoal = async (userId) => {
     return null;  // 목표가 없을 경우 null 반환
 };
 
-const uploadBeforePhoto = async (userId, photoUrl) => {
-    await goalRepository.updateBeforePhoto(userId, photoUrl);
+const uploadBeforePhoto = async (userId, goalId, beforePhotoUrl) => {
+    await goalRepository.updateBeforePhoto(userId, goalId, beforePhotoUrl);
 };
 
 const uploadAfterPhoto = async (userId, photoUrl) => {
