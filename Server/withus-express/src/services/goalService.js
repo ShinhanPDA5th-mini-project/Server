@@ -4,18 +4,23 @@ import EfficientNetModel from '../models/EfficientNetModel.js';
 const getSequentialGoal = async (userId) => {
     const goal = await goalRepository.getNextGoal(userId);
     if (goal) {
-        return { description: goal.description };  // description 필드만 반환
+        return { description: goal.description }; 
     }
-    return null;  // 목표가 없을 경우 null 반환
+    return null; 
 };
 
 const uploadBeforePhoto = async (userId, goalId, beforePhotoUrl) => {
     await goalRepository.updateBeforePhoto(userId, goalId, beforePhotoUrl);
 };
 
-const uploadAfterPhoto = async (userId, photoUrl) => {
-    await goalRepository.updateAfterPhoto(userId, photoUrl);
+const getUserGoalProgress = async (userId, goalId) => {
+    return await goalRepository.getGoalProgress(userId, goalId);
 };
+
+const uploadAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
+    await goalRepository.updateAfterPhoto(userId, goalId, afterPhotoUrl);
+};
+
 
 const evaluateGoal = async (userId) => {
     const goal = await goalRepository.getGoalByUserId(userId);
@@ -32,6 +37,7 @@ const evaluateGoal = async (userId) => {
 export default {
     getSequentialGoal,
     uploadBeforePhoto,
+    getUserGoalProgress,
     uploadAfterPhoto,
     evaluateGoal
 };
