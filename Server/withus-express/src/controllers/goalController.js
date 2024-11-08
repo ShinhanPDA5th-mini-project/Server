@@ -1,8 +1,18 @@
 import goalService from '../services/goalService.js';
 
 export const getTodayGoal = async (req, res) => {
-    const goal = await goalService.getTodayGoal(req.userId);
-    res.json(goal);
+    try {
+        const goal = await goalService.getTodayGoal(req.userId);
+        
+        if (goal) {
+            res.json(goal);
+        } else {
+            res.status(404).json({ message: "오늘의 목표를 찾을 수 없습니다." });
+        }
+    } catch (error) {
+        console.error("Error fetching today's goal:", error);
+        res.status(500).json({ message: "목표를 가져오는 중 오류가 발생했습니다." });
+    }
 };
 
 export const uploadBeforePhoto = async (req, res) => {
