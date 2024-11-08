@@ -1,8 +1,12 @@
 import goalRepository from '../repositories/goalRepository.js';
 import EfficientNetModel from '../models/EfficientNetModel.js';
 
-const getTodayGoal = async (userId) => {
-    return await goalRepository.getRandomGoal(userId);
+const getSequentialGoal = async (userId) => {
+    const goal = await goalRepository.getNextGoal(userId);
+    if (goal) {
+        return { description: goal.description };  // description 필드만 반환
+    }
+    return null;  // 목표가 없을 경우 null 반환
 };
 
 const uploadBeforePhoto = async (userId, photoUrl) => {
@@ -26,7 +30,7 @@ const evaluateGoal = async (userId) => {
 };
 
 export default {
-    getTodayGoal,
+    getSequentialGoal,
     uploadBeforePhoto,
     uploadAfterPhoto,
     evaluateGoal

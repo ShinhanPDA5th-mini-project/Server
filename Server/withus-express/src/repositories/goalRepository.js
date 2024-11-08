@@ -1,12 +1,7 @@
 import Goal from '../models/Goal.js';
 
-const getRandomGoal = async (userId) => {
-    const goals = await Goal.find({ userId, status: 'pending' });
-    if (goals.length === 0) {
-        return null;
-    }
-    const randomIndex = Math.floor(Math.random() * goals.length);
-    return goals[randomIndex];
+const getNextGoal = async (userId) => {
+    return await Goal.findOne({ userId: userId, status: 'pending' }).sort({ _id: 1 }); // ID 순서대로 첫 번째 미완료 목표 가져오기
 };
 
 const updateBeforePhoto = async (userId, photoUrl) => {
@@ -38,7 +33,7 @@ const getGoalByUserId = async (userId) => {
 };
 
 export default {
-    getRandomGoal,
+    getNextGoal,
     updateBeforePhoto,
     updateAfterPhoto,
     updateStatus,
