@@ -141,11 +141,11 @@ export const submitGoal = async (req, res) => {
     const { userId, goalId } = req.body;
 
     try {
-        console.log("Submitting goal for userId:", userId, "goalId:", goalId);
+        if (await goalService.hasCompletedToday(userId)) {
+            return res.status(400).json({ message: "하루에 한 개의 미션만 수행할 수 있습니다." });
+        }
 
         const goalProgress = await goalService.getUserGoalProgress(userId, goalId);
-        console.log("Goal progress retrieved:", goalProgress);
-
         if (!goalProgress || !goalProgress.beforePhotoUrl || !goalProgress.afterPhotoUrl) {
             return res.status(400).json({ message: "Before와 After 사진을 모두 업로드해야 합니다." });
         }
@@ -154,10 +154,19 @@ export const submitGoal = async (req, res) => {
         const isCompleted = await EfficientNetModel.comparePhotos(beforePhotoUrl, afterPhotoUrl);
         await goalService.updateGoalCompletionStatus(userId, goalId, isCompleted);
 
-        res.json({
-            message: isCompleted ? "미션이 성공적으로 완료되었습니다!" : "미션 실패. 다시 시도해 주세요.",
-            isCompleted
-        });
+        if (isCompleted) {
+            const updatedUser = await goalService.updateReward(userId);
+            res.json({
+                message: "미션이 성공적으로 완료되었습니다!",
+                reward: updatedUser.reward,
+                currentLevel: updatedUser.currentLevel
+            });
+        } else {
+            res.json({
+                message: "미션 실패. 다시 시도해 주세요.",
+                isCompleted
+            });
+        }
     } catch (error) {
         console.error("Error in goal submission:", error);
         res.status(500).json({ message: "목표 제출 중 오류가 발생했습니다." });
