@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import heicConvert from 'heic-convert';
 import goalService from '../services/goalService.js';
 import EfficientNetModel from '../models/EfficientNetModel.js';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -84,6 +85,7 @@ export const uploadBeforePhoto = (req, res) => {
 
             // Before 사진 URL 저장
             await goalService.uploadBeforePhoto(userId, goalId, beforePhotoUrl);
+            //await goalService.uploadBeforePhoto(new mongoose.Types.ObjectId(userId), new mongoose.Types.ObjectId(goalId), beforePhotoUrl);
 
             res.json({ message: "Before 사진이 성공적으로 업로드되었습니다.", beforePhotoUrl });
         } catch (error) {
@@ -123,6 +125,8 @@ export const uploadAfterPhoto = (req, res) => {
 
             // After 사진 URL 저장
             await goalService.uploadAfterPhoto(userId, goalId, afterPhotoUrl);
+            //await goalService.uploadAfterPhoto(new mongoose.Types.ObjectId(userId), new mongoose.Types.ObjectId(goalId), afterPhotoUrl);
+
 
             res.json({ message: "After 사진이 성공적으로 업로드되었습니다.", afterPhotoUrl });
         } catch (error) {
@@ -137,7 +141,11 @@ export const submitGoal = async (req, res) => {
     const { userId, goalId } = req.body;
 
     try {
+        console.log("Submitting goal for userId:", userId, "goalId:", goalId);
+
         const goalProgress = await goalService.getUserGoalProgress(userId, goalId);
+        console.log("Goal progress retrieved:", goalProgress);
+
         if (!goalProgress || !goalProgress.beforePhotoUrl || !goalProgress.afterPhotoUrl) {
             return res.status(400).json({ message: "Before와 After 사진을 모두 업로드해야 합니다." });
         }

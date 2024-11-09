@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Goal from '../models/Goal.js';
 import UserGoalProgress from '../models/UserGoalProgress.js';
 
@@ -14,7 +15,10 @@ const updateBeforePhoto = async (userId, goalId, beforePhotoUrl) => {
 };
 
 const getGoalProgress = async (userId, goalId) => {
-    return await UserGoalProgress.findOne({ userId, goalId });
+    return await UserGoalProgress.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        goalId: new mongoose.Types.ObjectId(goalId)
+    });
 };
 
 const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
