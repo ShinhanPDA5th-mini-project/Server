@@ -21,6 +21,19 @@ const getGoalProgress = async (userId, goalId) => {
     });
 };
 
+const getGoalProgressByDate = async (userId, date) => {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    return await UserGoalProgress.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        date: { $gte: startOfDay, $lte: endOfDay }
+    });
+};
+
 const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     await UserGoalProgress.findOneAndUpdate(
         { userId, goalId },
@@ -53,6 +66,7 @@ export default {
     getNextGoal,
     updateBeforePhoto,
     getGoalProgress,
+    getGoalProgressByDate,
     updateAfterPhoto,
     updateGoalCompletionStatus,
     updateStatus,
