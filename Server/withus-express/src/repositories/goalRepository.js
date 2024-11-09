@@ -25,6 +25,14 @@ const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     );
 };
 
+const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
+    await UserGoalProgress.findOneAndUpdate(
+        { userId, goalId },
+        { isCompleted: isCompleted },
+        { new: true }
+    );
+};
+
 const updateStatus = async (userId, status) => {
     return await Goal.findOneAndUpdate(
         { userId, status: 'pending' },
@@ -42,6 +50,7 @@ export default {
     updateBeforePhoto,
     getGoalProgress,
     updateAfterPhoto,
+    updateGoalCompletionStatus,
     updateStatus,
     getGoalByUserId
 };

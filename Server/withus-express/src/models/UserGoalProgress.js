@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const UserGoalProgressSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',  // User 모델과의 관계 설정
+        ref: 'users',  // User 모델과의 관계 설정
         required: true
     },
     goalId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Goal',  // Goal 모델과의 관계 설정
+        ref: 'goals',  // Goal 모델과의 관계 설정
         required: true
     },
     beforePhotoUrl: {

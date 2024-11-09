@@ -7,6 +7,7 @@ import goalRoutes from './routes/goalRoutes.js';
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const mongoDBUrl = process.env.DB_URL;
 console.log("MongoDB URL:", mongoDBUrl); // 환경 변수 로드 확인

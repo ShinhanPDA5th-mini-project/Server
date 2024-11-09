@@ -8,7 +8,7 @@ const comparePhotos = async (beforePhotoUrl, afterPhotoUrl) => {
     try {
         const response = await axios.post(PYTHON_SERVER_URL, {
             beforePhotoUrl,
-            afterPhotoUrl,
+            afterPhotoUrl
         });
         return response.data.isCompleted;
     } catch (error) {
