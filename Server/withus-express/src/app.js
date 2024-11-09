@@ -7,13 +7,13 @@ import goalRoutes from './routes/goalRoutes.js';
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const mongoDBUrl = process.env.DB_URL;
-console.log("MongoDB URL:", mongoDBUrl); // 환경 변수 로드 확인
-
+console.log("MongoDB URL:", mongoDBUrl);
 
 mongoose.connect(mongoDBUrl, {
-    writeConcern: { w: 'majority' } // writeConcern 설정 추가
+    writeConcern: { w: 'majority' }
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('Connection error:', err));
