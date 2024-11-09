@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Goal from '../models/Goal.js';
 import UserGoalProgress from '../models/UserGoalProgress.js';
 
@@ -14,13 +15,24 @@ const updateBeforePhoto = async (userId, goalId, beforePhotoUrl) => {
 };
 
 const getGoalProgress = async (userId, goalId) => {
-    return await UserGoalProgress.findOne({ userId, goalId });
+    return await UserGoalProgress.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        goalId: new mongoose.Types.ObjectId(goalId)
+    });
 };
 
 const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     await UserGoalProgress.findOneAndUpdate(
         { userId, goalId },
         { afterPhotoUrl },
+        { new: true }
+    );
+};
+
+const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
+    await UserGoalProgress.findOneAndUpdate(
+        { userId, goalId },
+        { isCompleted: isCompleted },
         { new: true }
     );
 };
@@ -42,6 +54,7 @@ export default {
     updateBeforePhoto,
     getGoalProgress,
     updateAfterPhoto,
+    updateGoalCompletionStatus,
     updateStatus,
     getGoalByUserId
 };

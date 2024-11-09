@@ -21,6 +21,9 @@ const uploadAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     await goalRepository.updateAfterPhoto(userId, goalId, afterPhotoUrl);
 };
 
+const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
+    await goalRepository.updateGoalCompletionStatus(userId, goalId, isCompleted);
+};
 
 const evaluateGoal = async (userId) => {
     const goal = await goalRepository.getGoalByUserId(userId);
@@ -39,5 +42,6 @@ export default {
     uploadBeforePhoto,
     getUserGoalProgress,
     uploadAfterPhoto,
+    updateGoalCompletionStatus,
     evaluateGoal
 };
