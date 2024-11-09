@@ -4,8 +4,9 @@ import dotenv from 'dotenv';
 import sharp from 'sharp';
 import heicConvert from 'heic-convert';
 import goalService from '../services/goalService.js';
-import EfficientNetModel from '../models/EfficientNetModel.js';
-import mongoose from 'mongoose';
+import PhotoCompare from '../models/PhotoCompare.js';
+import moment from 'moment';
+
 
 dotenv.config();
 
@@ -141,8 +142,11 @@ export const submitGoal = async (req, res) => {
     const { userId, goalId } = req.body;
 
     try {
-        if (await goalService.hasCompletedToday(userId)) {
-            return res.status(400).json({ message: "하루에 한 개의 미션만 수행할 수 있습니다." });
+        const today = moment().startOf('day');
+        const existingProgress = await goalService.getUserGoalProgressByDate(userId, today);
+
+        if (existingProgress) {
+            return res.status(400).json({ message: "하루에 하나의 미션만 완료할 수 있습니다." });
         }
 
         const goalProgress = await goalService.getUserGoalProgress(userId, goalId);
@@ -151,7 +155,7 @@ export const submitGoal = async (req, res) => {
         }
 
         const { beforePhotoUrl, afterPhotoUrl } = goalProgress;
-        const isCompleted = await EfficientNetModel.comparePhotos(beforePhotoUrl, afterPhotoUrl);
+        const isCompleted = await PhotoCompare.comparePhotos(beforePhotoUrl, afterPhotoUrl);
         await goalService.updateGoalCompletionStatus(userId, goalId, isCompleted);
 
         if (isCompleted) {
