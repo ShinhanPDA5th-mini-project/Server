@@ -27,8 +27,9 @@ const uploadAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     await goalRepository.updateAfterPhoto(userId, goalId, afterPhotoUrl);
 };
 
-const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
-    await goalRepository.updateGoalCompletionStatus(userId, goalId, isCompleted);
+const updateGoalCompletionStatus = async (goalId, isCompleted) => {
+    const status = isCompleted ? '완료' : '미완료';
+    return await goalRepository.updateGoalStatus(goalId, status);
 };
 
 const evaluateGoal = async (userId) => {
