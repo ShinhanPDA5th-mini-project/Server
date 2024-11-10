@@ -1,14 +1,11 @@
-// mypageController.js
-import path from 'path';
-import { fileURLToPath } from 'url';
+import mypageService from '../services/mypageService.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export const renderMyPage = (req, res) => {
-    res.status(200).send('Navigate to Server');
-};
-
-export const serverMypage = (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '..', '..', '..', 'withus-client', 'dist', 'index.html'));
+export const getMyPageData = async (req, res) => {
+    try {
+        const myPageData = await mypageService.getMyPageData(req.user);
+        res.json(myPageData);
+    } catch (error) {
+        console.error("Error fetching my page data:", error);
+        res.status(500).json({ message: "마이페이지 데이터를 조회하는 중에 오류가 발생했습니다." });
+    }
 };

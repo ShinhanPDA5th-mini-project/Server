@@ -27,9 +27,16 @@ const uploadAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     await goalRepository.updateAfterPhoto(userId, goalId, afterPhotoUrl);
 };
 
-const updateGoalCompletionStatus = async (goalId, isCompleted) => {
-    const status = isCompleted ? '완료' : '미완료';
-    return await goalRepository.updateGoalStatus(goalId, status);
+const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
+    if (!userId || !goalId) {
+        throw new Error("userId와 goalId는 필수 값입니다.");
+    }
+    await goalRepository.updateGoalCompletionStatus(userId, goalId, isCompleted);
+};
+
+const updateGoalStatus = async (goalId, status) => {
+    // Goal 컬렉션 status 업데이트
+    await goalRepository.updateGoalStatus(goalId, status);
 };
 
 const evaluateGoal = async (userId) => {
@@ -97,6 +104,7 @@ export default {
     getUserGoalProgressByDate,
     uploadAfterPhoto,
     updateGoalCompletionStatus,
+    updateGoalStatus,
     evaluateGoal,
     updateReward,
     hasCompletedToday

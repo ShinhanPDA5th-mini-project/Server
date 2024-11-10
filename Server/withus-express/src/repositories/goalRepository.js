@@ -2,9 +2,29 @@ import mongoose from 'mongoose';
 import Goal from '../models/Goal.js';
 import UserGoalProgress from '../models/UserGoalProgress.js';
 
-// 다음 목표 가져오기
+// 오늘 목표 (미완료 상태에서 첫 번째 목표)
 const getNextGoal = async (userId) => {
-    return await Goal.findOne({ userId: userId, status: '미완료' }).sort({ _id: 1 });
+    return await Goal.findOne({ 
+        userId: new mongoose.Types.ObjectId(userId),
+        status: '미완료'
+    }).sort({ _id: 1 });
+};
+
+// 내일 목표 조회
+const getGoalAfterToday = async (userId) => {
+    return await Goal.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        status: '미완료'
+    }).sort({ _id: 1 }).skip(1);
+};
+
+// 레벨에 따른 목표
+const getGoalsByLevel = async (userId, level) => {
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const capitalizedLevel = level.charAt(0).toUpperCase() + level.slice(1);
+    const goals = await Goal.find({ userId: userObjectId, level: capitalizedLevel });
+        
+    return goals;
 };
 
 // 목표의 Before 사진 업데이트
@@ -23,11 +43,6 @@ const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
         { afterPhotoUrl },
         { new: true }
     );
-};
-
-// 목표 완료 상태 업데이트
-const updateGoalStatus = async (goalId, status) => {
-    return await Goal.findByIdAndUpdate(goalId, { status: status }, { new: true });
 };
 
 // 목표 진행 데이터 가져오기
@@ -54,10 +69,14 @@ const getGoalProgressByDate = async (userId, date) => {
 
 const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
     await UserGoalProgress.findOneAndUpdate(
-        { userId, goalId },
+        { userId: userId, goalId: goalId },
         { isCompleted: isCompleted },
         { new: true }
     );
+};
+
+const updateGoalStatus = async (goalId, status) => {
+    await Goal.findByIdAndUpdate(goalId, { status: status }, { new: true });
 };
 
 const updateStatus = async (userId, status) => {
@@ -73,8 +92,14 @@ const getGoalByUserId = async (userId) => {
     return await Goal.findOne({ userId, status: 'pending' });
 };
 
+const getGoalsByUserIdAndLevel = async (userId, level) => {
+    return await Goal.find({ userId: userId, level: level }).sort({ _id: 1 }).limit(10);
+};
+
 export default {
+    getGoalsByLevel,
     getNextGoal,
+    getGoalAfterToday,
     updateBeforePhoto,
     getGoalProgress,
     getGoalProgressByDate,
@@ -82,5 +107,6 @@ export default {
     updateGoalCompletionStatus,
     updateGoalStatus,
     updateStatus,
-    getGoalByUserId
+    getGoalByUserId,
+    getGoalsByUserIdAndLevel
 };
