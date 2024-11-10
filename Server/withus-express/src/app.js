@@ -4,13 +4,19 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import goalRoutes from './routes/goalRoutes.js';
+import mypageRoutes from './routes/mypageRoutes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 app.use(express.json());
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, '..', '..', '..', '..', 'withus-client', 'dist')));
+
 const mongoDBUrl = process.env.DB_URL;
 console.log("MongoDB URL:", mongoDBUrl); // 환경 변수 로드 확인
-
 
 mongoose.connect(mongoDBUrl, {
     writeConcern: { w: 'majority' } // writeConcern 설정 추가
@@ -19,9 +25,14 @@ mongoose.connect(mongoDBUrl, {
 .catch(err => console.error('Connection error:', err));
 
 app.use('/api/goals', goalRoutes);
+app.use('/api/mypage', mypageRoutes);
 
 app.get('/', (req, res) => {
     res.send('WithUs Express Server!');
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', '..', '..', '..', 'withus-client', 'dist', 'index.html'));
 });
 
 const port = process.env.PORT || 3000;

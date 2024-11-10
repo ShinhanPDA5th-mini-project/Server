@@ -1,10 +1,11 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { S3Client } from "@aws-sdk/client-s3";
 import multer from 'multer';
 import multerS3 from 'multer-s3';
-import dotenv from 'dotenv';
-import goalService from '../services/goalService.js';
 
-dotenv.config();
+import goalService from '../services/goalService.js';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -107,3 +108,4 @@ export const submitGoal = async (req, res) => {
     const result = await goalService.evaluateGoal(req.userId);
     res.json(result);
 };
+
