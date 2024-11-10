@@ -11,7 +11,6 @@ export const getMyPageData = async (userId) => {
     // 레벨별 목표들 조회
     for (const level of levelNames) {
         const goals = await goalRepository.getGoalsByLevel(userId, level);
-        console.log(`Fetched goals for user ${JSON.stringify(user)}, level ${level}: ${JSON.stringify(goals, null, 2)}`);
 
         levels[level] = goals.length > 0 
             ? goals.map((goal, index) => ({
