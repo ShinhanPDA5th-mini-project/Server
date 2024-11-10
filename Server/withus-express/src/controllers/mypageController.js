@@ -1,4 +1,4 @@
-import mypageService from '../services/mypageService.js';
+import mypageService from '../services/myPageService.js';
 
 export const getMyPageData = async (req, res) => {
     try {
