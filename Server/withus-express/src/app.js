@@ -8,7 +8,7 @@ import goalRoutes from './routes/goalRoutes.js';
 import mypageRoutes from './routes/mypageRoutes.js';
 import homeRoutes from './routes/homeRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
-import { authenticate } from './middlewares/authMiddleware.js';
+import authenticate from './middlewares/authMiddleware.js';
 
 import cors from "cors";
 import bodyParser from 'body-parser';
@@ -35,7 +35,7 @@ mongoose.connect(mongoDBUrl, {
 
 app.use('/api/auth/kakao', kakaoAuthRoutes);
 app.use('/api/goals', authenticate, goalRoutes);
-app.use('/api/mypage', authenticate, mypageRoutes);
+app.use('/api', authenticate, mypageRoutes);
 app.use('/api', authenticate, homeRoutes);
 app.use('/api', chatRoutes);
 

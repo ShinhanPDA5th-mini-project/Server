@@ -1,13 +1,9 @@
-// mypageRoutes.js
 import express from 'express';
-import { renderMyPage, serverMypage } from '../controllers/mypageController.js';
+import { getMyPageData } from '../controllers/mypageController.js';
+import authenticate from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// /navigate-to-mypage 라우트
-//router.get('/navigate-to-mypage', renderMyPage);
-
-// /api/mypage 라우트
-router.get('/api/mypage', serverMypage);
+router.get('/mypage', authenticate, getMyPageData);
 
 export default router;

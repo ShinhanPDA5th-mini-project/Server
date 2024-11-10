@@ -4,7 +4,7 @@ const getUserById = async (userId) => {
     return await User.findById(userId);
 };
 
-// 액세스 토큰을 통해 사용자 조회
+// 액세스 토큰으로 사용자 조회
 const findUserByToken = async (token) => {
     return await User.findOne({ accessToken: token });
 };

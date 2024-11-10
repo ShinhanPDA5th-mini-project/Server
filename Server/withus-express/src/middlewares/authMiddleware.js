@@ -1,6 +1,6 @@
 import userRepository from '../repositories/userRepository.js';
 
-export const authenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
         return res.status(401).json({ message: "Access Token이 필요합니다." });
@@ -19,3 +19,5 @@ export const authenticate = async (req, res, next) => {
         return res.status(500).json({ message: "서버 인증 오류" });
     }
 };
+
+export default authenticate;

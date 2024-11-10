@@ -1,4 +1,3 @@
-// services/kakaoAuthService.js
 import axios from 'axios';
 
 export const getAccessToken = async (code) => {

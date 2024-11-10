@@ -18,6 +18,15 @@ const getGoalAfterToday = async (userId) => {
     }).sort({ _id: 1 }).skip(1);
 };
 
+// 레벨에 따른 목표
+const getGoalsByLevel = async (userId, level) => {
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const capitalizedLevel = level.charAt(0).toUpperCase() + level.slice(1);
+    const goals = await Goal.find({ userId: userObjectId, level: capitalizedLevel });
+        
+    return goals;
+};
+
 // 목표의 Before 사진 업데이트
 const updateBeforePhoto = async (userId, goalId, beforePhotoUrl) => {
     await UserGoalProgress.findOneAndUpdate(
@@ -84,7 +93,12 @@ const getGoalByUserId = async (userId) => {
     return await Goal.findOne({ userId, status: 'pending' });
 };
 
+const getGoalsByUserIdAndLevel = async (userId, level) => {
+    return await Goal.find({ userId: userId, level: level }).sort({ _id: 1 }).limit(10);
+};
+
 export default {
+    getGoalsByLevel,
     getNextGoal,
     getGoalAfterToday,
     updateBeforePhoto,
@@ -94,5 +108,6 @@ export default {
     updateGoalCompletionStatus,
     updateGoalStatus,
     updateStatus,
-    getGoalByUserId
+    getGoalByUserId,
+    getGoalsByUserIdAndLevel
 };

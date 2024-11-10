@@ -1,7 +1,7 @@
 // routes/kakaoAuthRoutes.js
 import express from "express";
 import { kakaoLogin, logout } from "../controllers/kakaoAuthController.js";
-import { authenticate } from "../middlewares/authMiddleware.js";
+import authenticate from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
