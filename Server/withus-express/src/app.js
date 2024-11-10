@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import goalRoutes from './routes/goalRoutes.js';
+import homeRoutes from './routes/homeRoutes.js';
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ mongoose.connect(mongoDBUrl, {
 .catch(err => console.error('Connection error:', err));
 
 app.use('/api/goals', goalRoutes);
+app.use('/api', homeRoutes);
 
 app.get('/', (req, res) => {
     res.send('WithUs Express Server!');
