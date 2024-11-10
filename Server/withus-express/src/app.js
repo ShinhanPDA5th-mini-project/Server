@@ -5,10 +5,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import goalRoutes from './routes/goalRoutes.js';
 import homeRoutes from './routes/homeRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
+import cors from "cors";
+import bodyParser from 'body-parser';
+
 
 const app = express();
-app.use(express.json());
+app.use(cors()); app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const mongoDBUrl = process.env.DB_URL;
 console.log("MongoDB URL:", mongoDBUrl);
@@ -21,6 +26,8 @@ mongoose.connect(mongoDBUrl, {
 
 app.use('/api/goals', goalRoutes);
 app.use('/api', homeRoutes);
+app.use('/api', chatRoutes);
+
 
 app.get('/', (req, res) => {
     res.send('WithUs Express Server!');
