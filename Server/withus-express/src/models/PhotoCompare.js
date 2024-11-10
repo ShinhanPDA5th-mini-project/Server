@@ -1,14 +1,12 @@
-// EfficientNetModel.js
-
 import axios from 'axios';
 
-const PYTHON_SERVER_URL = 'http://localhost:5000/analyze';
+const PYTHON_SERVER_URL = 'http://127.0.0.1:5000/analyze';
 
 const comparePhotos = async (beforePhotoUrl, afterPhotoUrl) => {
     try {
         const response = await axios.post(PYTHON_SERVER_URL, {
             beforePhotoUrl,
-            afterPhotoUrl,
+            afterPhotoUrl
         });
         return response.data.isCompleted;
     } catch (error) {

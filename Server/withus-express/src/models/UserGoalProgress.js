@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const UserGoalProgressSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',  // User 모델과의 관계 설정
+        ref: 'User', 
         required: true
     },
     goalId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Goal',  // Goal 모델과의 관계 설정
+        ref: 'Goal',
         required: true
     },
     beforePhotoUrl: {
@@ -25,11 +25,10 @@ const UserGoalProgressSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now  // 목표 수행 날짜
+        default: Date.now  
     }
 });
 
-// UserGoalProgress 모델 생성
 const UserGoalProgress = mongoose.model('UserGoalProgress', UserGoalProgressSchema);
 
 export default UserGoalProgress;
