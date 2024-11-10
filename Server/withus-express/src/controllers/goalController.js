@@ -10,9 +10,6 @@ import goalService from '../services/goalService.js';
 import PhotoCompare from '../models/PhotoCompare.js';
 import moment from 'moment';
 
-
-import goalService from '../services/goalService.js';
-
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
     credentials: {
