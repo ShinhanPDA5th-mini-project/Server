@@ -9,6 +9,7 @@ import heicConvert from 'heic-convert';
 import goalService from '../services/goalService.js';
 import PhotoCompare from '../models/PhotoCompare.js';
 import moment from 'moment';
+import goalRepository from '../repositories/goalRepository.js';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -49,15 +50,18 @@ const uploadToS3 = async (buffer, key) => {
 
 export const getTodayGoal = async (req, res) => {
     try {
-        const goal = await goalService.getSequentialGoal(req.body.userId);
+        const userId = req.user._id;
+
+        // 미완료된 가장 첫 번째 목표 가져오기
+        const goal = await goalRepository.getNextGoal(userId);
         if (goal) {
             res.json(goal);
         } else {
-            res.status(404).json({ message: "사용자의 목표가 없습니다." });
+            res.status(404).json({ message: "미완료 목표가 없습니다." });
         }
     } catch (error) {
-        console.error("Error fetching today's goal:", error);
-        res.status(500).json({ message: "목표를 조회하는 중에 오류가 발생했습니다." });
+        console.error("Error fetching top incomplete goal:", error);
+        res.status(500).json({ message: "미완료 목표를 조회하는 중에 오류가 발생했습니다." });
     }
 };
 

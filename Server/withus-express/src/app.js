@@ -43,9 +43,9 @@ app.get('/', (req, res) => {
     res.send('WithUs Express Server!');
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', '..', '..', '..', 'withus-client', 'dist', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', '..', '..', '..', 'withus-client', 'dist', 'index.html'));
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

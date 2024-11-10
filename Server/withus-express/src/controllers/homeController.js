@@ -1,29 +1,30 @@
 import userRepository from '../repositories/userRepository.js';
 import goalRepository from '../repositories/goalRepository.js';
 
-// 메인화면 조회
 export const getMainPageData = async (req, res) => {
-    const userId = req.user._id; // 수정: req.body.userId -> req.user._id
+    const user = req.user; // authMiddleware에서 인증된 사용자
+
+    if (!user) {
+        return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
+    }
 
     try {
-        // 리워드 데이터 get
-        const user = await userRepository.getUserById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
-        }
+        // 미완료 목표 조회
+        const todayGoal = await goalRepository.getNextGoal(user._id);
+        const tomorrowGoal = await goalRepository.getGoalAfterToday(user._id);
 
-        // 미완료 목표 중 첫 번째 목표
-        const nextGoal = await goalRepository.getNextGoal(userId);
-        if (!nextGoal) {
-            return res.status(404).json({ message: "미완료 목표가 없습니다." });
-        }
-
+        // 응답 데이터 생성
         res.json({
+            name: user.name,
             reward: user.reward,
-            nextGoal: {
-                description: nextGoal.description,
-                status: nextGoal.status
-            }
+            todayGoal: todayGoal ? {
+                description: todayGoal.description,
+                status: todayGoal.status
+            } : "오늘의 목표가 없습니다.",
+            tomorrowGoal: tomorrowGoal ? {
+                description: tomorrowGoal.description,
+                status: tomorrowGoal.status
+            } : "내일의 목표가 없습니다."
         });
     } catch (error) {
         console.error("Error fetching main data:", error);

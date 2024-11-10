@@ -2,9 +2,20 @@ import mongoose from 'mongoose';
 import Goal from '../models/Goal.js';
 import UserGoalProgress from '../models/UserGoalProgress.js';
 
-// 다음 목표 가져오기
+// 오늘 목표 (미완료 상태에서 첫 번째 목표)
 const getNextGoal = async (userId) => {
-    return await Goal.findOne({ userId: userId, status: '미완료' }).sort({ _id: 1 });
+    return await Goal.findOne({ 
+        userId: new mongoose.Types.ObjectId(userId),
+        status: '미완료'
+    }).sort({ _id: 1 });
+};
+
+// 내일 목표 조회
+const getGoalAfterToday = async (userId) => {
+    return await Goal.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        status: '미완료'
+    }).sort({ _id: 1 }).skip(1);
 };
 
 // 목표의 Before 사진 업데이트
@@ -75,6 +86,7 @@ const getGoalByUserId = async (userId) => {
 
 export default {
     getNextGoal,
+    getGoalAfterToday,
     updateBeforePhoto,
     getGoalProgress,
     getGoalProgressByDate,

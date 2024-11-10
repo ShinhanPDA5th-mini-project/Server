@@ -1,9 +1,10 @@
 import express from 'express';
 import axios from 'axios';
+import { authenticate } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/chat', async (req, res) => {
+router.post('/chat', authenticate, async (req, res) => {
     const { message } = req.body;
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
