@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import multer from 'multer';
-import dotenv from 'dotenv';
+import multerS3 from 'multer-s3';
 import sharp from 'sharp';
 import heicConvert from 'heic-convert';
 import goalService from '../services/goalService.js';
@@ -8,7 +11,7 @@ import PhotoCompare from '../models/PhotoCompare.js';
 import moment from 'moment';
 
 
-dotenv.config();
+import goalService from '../services/goalService.js';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
