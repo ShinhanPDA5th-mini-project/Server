@@ -3,7 +3,7 @@ import goalRepository from '../repositories/goalRepository.js';
 
 // 메인화면 조회
 export const getMainPageData = async (req, res) => {
-    const { userId } = req.body;
+    const userId = req.user._id; // 수정: req.body.userId -> req.user._id
 
     try {
         // 리워드 데이터 get
