@@ -163,6 +163,9 @@ export const submitGoal = async (req, res) => {
         await goalService.updateGoalCompletionStatus(userId, goalId, isCompleted);
 
         if (isCompleted) {
+            await goalService.updateGoalCompletionStatus(userId, goalId, isCompleted);
+            await goalService.updateGoalStatus(goalId, "완료"); // Goal 상태 업데이트
+            
             const updatedUser = await goalService.updateReward(userId);
             res.json({
                 message: "미션이 성공적으로 완료되었습니다!",

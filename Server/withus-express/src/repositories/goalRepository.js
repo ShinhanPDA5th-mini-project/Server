@@ -45,11 +45,6 @@ const updateAfterPhoto = async (userId, goalId, afterPhotoUrl) => {
     );
 };
 
-// 목표 완료 상태 업데이트
-const updateGoalStatus = async (goalId, status) => {
-    return await Goal.findByIdAndUpdate(goalId, { status: status }, { new: true });
-};
-
 // 목표 진행 데이터 가져오기
 const getGoalProgress = async (userId, goalId) => {
     return await UserGoalProgress.findOne({
@@ -74,10 +69,14 @@ const getGoalProgressByDate = async (userId, date) => {
 
 const updateGoalCompletionStatus = async (userId, goalId, isCompleted) => {
     await UserGoalProgress.findOneAndUpdate(
-        { userId, goalId },
+        { userId: userId, goalId: goalId },
         { isCompleted: isCompleted },
         { new: true }
     );
+};
+
+const updateGoalStatus = async (goalId, status) => {
+    await Goal.findByIdAndUpdate(goalId, { status: status }, { new: true });
 };
 
 const updateStatus = async (userId, status) => {
