@@ -20,7 +20,7 @@ export const kakaoLogin = async (req, res) => {
         res.json({ message: "로그인 성공", user });
     } catch (error) {
         console.error("카카오 로그인 에러:", error);
-        res.status(500).json({ message: "카카오 로그인 실패" });
+        res.status(500).json({ message: "카카오 로그인 실패", error });
     }
 };
 
