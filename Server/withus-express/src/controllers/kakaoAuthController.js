@@ -6,24 +6,18 @@ export const kakaoLogin = async (req, res) => {
         const code = req.query.code;
         if (!code) throw new Error("Authorization code is missing");
 
-        console.log(">>> 1");
-
         const tokenData = await kakaoAuthService.getAccessToken(code);
-        console.log(">>> 2");
         const userData = await kakaoAuthService.getKakaoUserData(tokenData.access_token);
-        console.log(">>> 3");
 
         const user = await userRepository.getOrCreateUserByKakaoId(
             userData.id,
             userData.properties.nickname,
             tokenData.access_token
         );
-        console.log(">>> 4");
-        sessionStorage.setItem("user", user.accessToken);
-        console.log(">>> 5");
 
-        // 로그인 성공 시 클라이언트에 리다이렉트 URL과 사용자 데이터 전송
-        res.json({ message: "로그인 성공", user });
+        const redirectUrl = `/main?token=${user.accessToken}`;
+        res.redirect(redirectUrl);
+
     } catch (error) {
         console.error("카카오 로그인 에러:", error);
         res.status(500).json({ message: "카카오 로그인 실패", error });
