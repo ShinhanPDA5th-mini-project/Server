@@ -14,6 +14,7 @@ export const kakaoLogin = async (req, res) => {
             userData.properties.nickname,
             tokenData.access_token
         );
+        sessionStorage.setItem("user", user.accessToken);
 
         // 로그인 성공 시 클라이언트에 리다이렉트 URL과 사용자 데이터 전송
         res.json({ message: "로그인 성공", user });
