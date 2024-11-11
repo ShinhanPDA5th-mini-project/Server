@@ -17,7 +17,6 @@ export const kakaoLogin = async (req, res) => {
 
         // 로그인 성공 시 클라이언트에 리다이렉트 URL과 사용자 데이터 전송
         res.json({ message: "로그인 성공", user });
-        res.redirect('http://3.36.43.54');
     } catch (error) {
         console.error("카카오 로그인 에러:", error);
         res.status(500).json({ message: "카카오 로그인 실패" });
